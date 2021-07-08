@@ -1,3 +1,4 @@
+#modules to be impoerted
 from pydub import AudioSegment
 from pydub.playback import play
 from pydub.silence import detect_silence
@@ -7,24 +8,30 @@ from gtts import gTTS
 import os
 import playsound
 
-f="converted_test_file_1.wav"
-sound = AudioSegment.from_file("#your_audio_file.wav", format="wav")
-a=detect_silence(sound,min_silence_len=5000,silence_thresh=-45)
+f="#YOUR_AUDIO_FILE.wav"
 
-print(a)
-recog_text=[]
+
+sound = AudioSegment.from_file("#your_audio_file.wav", format="wav")
+
+#Silent parts in the audio.The thresh and min_silence_len can be tweaked according to the audio
+a=detect_silence(sound,min_silence_len=5000,silence_thresh=-45)
+recog_text=[]#List of recognised and translated text from audio chunks
+
 
 def recog(audio):
+	"""audio is a AudioSegment object.It is the audio which is to be recognized.
+	The function recognises and translates the audio and append in the above lis(recog_text)."""
 	r=sr.Recognizer()
 	a=sr.AudioFile(audio)
 	with a as source:
 		Audio=r.record(a)
 	recognised_text=r.recognize_google(Audio,language="hi-IN")
-	trans=Translator()	
+	trans=Translator()
 	A=trans.translate(recognised_text)
 	recog_text.append(A.text)
 
 def spilt_and_recog():
+	"""This function spilts the audio into chunks and calls the recog() function and passes each chunk"""
 	start=0
 	if(len(a)==0):
 		recog(f)
@@ -45,17 +52,17 @@ def spilt_and_recog():
 		print("exported",file)
 		recog(file)
 
-spilt_and_recog()
-
-print(recog_text)
-
+		
 def save():
+	"""This function converts the text in recog_text to speech and save it as an mp3 file"""
 	for i in range(0,len(a)+1):
 		myobj = gTTS(text=recog_text[i],lang="en")
 		file_name="Test"+str(i)+".mp3"
 		myobj.save(file_name)
 
 def speak():
+	"""This function merges all audio files converted by save() into a single audio file
+	with all the necessary pauses and gaps"""
 	duration_list=[]
 	for i in a:
 		gap=i[1]-i[0]
@@ -74,7 +81,7 @@ def speak():
 	speak=AudioSegment.from_mp3("final_output.mp3")
 	play(speak)
 		
-
+spilt_and_recog()
 save()
 speak()
 
