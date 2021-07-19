@@ -109,7 +109,7 @@ def speak(original_audio,silence_list,final_file_name):
 
 
 def main(name_of_audio,lan,final_name):
-	final="C:/Users/Dhanalakshmi/Desktop/dubber/output"+"/"+final_name
+	final="#Path where Output audio should be saved"+"/"+final_name
 	f=name_of_audio
 	sound = AudioSegment.from_file(f, format="wav")
 	a=detect_silence(sound,min_silence_len=4000,silence_thresh=-45)
