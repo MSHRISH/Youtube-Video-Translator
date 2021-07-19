@@ -8,8 +8,8 @@ import subprocess
 def convrt(source):
 
 	
-	Converted_path="C:/Users/Dhanalakshmi/Desktop/dubber/Input_converted_audio"
-	I=os.listdir("C:/Users/Dhanalakshmi/Desktop/dubber/Input_converted_audio")
+	Converted_path="#Path where converted audio should be stored"
+	I=os.listdir("#Path where converted audio should be stored")
 	J=Converted_path+"/"+"Input_convert"+str(len(I))+".wav"
 	subprocess.call(['ffmpeg','-i',source,J])
 	
