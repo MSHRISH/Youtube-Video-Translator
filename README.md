@@ -10,3 +10,8 @@ The file "proto_dub_2.py" translates the audio file and saves the translated Aud
 
 The file "Merging.py" merges the Translated audio file with the Video file and saves the merged Video in a specific location where it can be accessed by the user.
 
+## Authors
+sanjay0001 <sanjayrakesh020720021@gmail.com>
+
+Rhikshitha <rhikshithakannan@gmail.com>
+
