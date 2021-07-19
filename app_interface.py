@@ -1,6 +1,10 @@
 from tkinter import*
 from tkinter import ttk
+from tkinter import messagebox
 
+import audio_video_extractor as AV
+import proto_dub_2 as PD
+import Merging as M
 
 class app(Frame):
 	def __init__(self,master=None):
@@ -11,20 +15,14 @@ class app(Frame):
 		self.interface()
 	def interface(self):
 		self.pack(fill=BOTH, expand=1)
-		Label(self,text="select the video format").grid(row=0,column=0)
-		self.A=StringVar(self)
-		self.A.set("url")
-		B=OptionMenu(self,self.A,"url","mp4")
-		B.config(width=5)
-		B.grid(row=0,column=1)
 		Label(self,text="Enter the location or url:").grid(row=2,column=0)
-		self.entry_box=Entry(self)
-		self.entry_box.grid(row=2,column=1)
+		self.entry_url=Entry(self)
+		self.entry_url.grid(row=2,column=1)
 		Label(self,text="Save the output as:").grid(row=3,column=0)
 		self.out_name=Entry(self,)
 		self.out_name.grid(row=3,column=1)
-		Button(self,text="Translate",width=10).grid(row=9,column=1)
-		self.clear_button=Button(self,text="Clear",width=10)
+		self.translate=Button(self,text="Translate",width=10,command=self.Translate).grid(row=9,column=1)
+		self.clear_button=Button(self,text="Clear",width=10,command=self.Clear)
 		self.clear_button.grid(row=11,column=1)
 		self.Language=["Hindi","Tamil","Malayalam","Kannada","Telugu"]
 		self.code=["hi-IN","ta-IN","ml-IN","kn-IN","te-IN"]
@@ -32,11 +30,26 @@ class app(Frame):
 		self.Lan.set(self.Language[0])
 		Lan_op=OptionMenu(self,self.Lan,*self.Language)
 		Lan_op.grid(row=8,column=1)
-	
+	def Translate(self):
+		url_path=self.entry_url.get()
+		Output_name=self.out_name.get()
+		Language=self.Lan.get()
+		index=self.Language.index(Language)
+		Lan_code=self.code[index]
+		path_list=AV.extract(url_path) #path_list[0] is video #path_list[1] is audio
+		PD.main(path_list[1],Lan_code,Output_name)
+		Final_audio_path="#path where translated audio should be saved"+"/"+Output_name+".mp3"
+		Output_vid_path="#Path where Final video should be saved"+"/"+Output_name+".mp4"
+		M.Merge(path_list[0],Final_audio_path,Output_vid_path)
+		messagebox.showinfo("Output","Translation success check the Output_video folder")
+
+	def Clear(self):
+		self.entry_url.delete(0,"end")
+		self.out_name.delete(0,"end")
+
+
 		
-
-
-
+	
 
 
 a=Tk()
